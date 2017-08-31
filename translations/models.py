@@ -169,7 +169,7 @@ class TextTranslationString(models.Model):
 class TranslatableAbstractModel(models.Model):
     translations = {}
     code = models.OneToOneField(
-        'Code', primary_key=True, default=create_code,
+        'translations.Code', primary_key=True, default=create_code,
         related_name='%(class)ss_code', verbose_name=_('code'),
     )
     class Meta:
