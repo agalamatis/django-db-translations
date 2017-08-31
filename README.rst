@@ -16,7 +16,7 @@ Install from **pip**:
 
 .. code-block:: sh
 
-    pip install django-db-translations
+    pip install translations
 
 Configuration
 -------------
@@ -27,15 +27,25 @@ and after declaring your LANGUAGES in the settings.py, migrate.
 
 Use in models.py
 ----------------
+
 For any class you want one of its fields to have a translation, you need to:
 
-1. Inherit from the TranslatableAbstractModel.
+1. Add 'translations' to your installed apps.
 
-2. Overwrite the translations dictionary field of the model inheriting from TranslatableAbstractModel with a keys the name of fields you want to be translated and for their values use the class name from one of the TranslationModel classes (VerySmallTranslationString, SmallTranslationString, MediumTranslationString, LongTranslationString, VeryLongTranslationString or TextTranslationString).
+2. Import TranslatableAbstractModel and any of the String models you will use (VerySmallTranslationString (4 chars), SmallTranslationString (16 chars), MediumTranslationString (64 chars), LongTranslationString (128 chars), VeryLongTranslationString (1024 chars) or TextTranslationString).
+
+3. Inherit from the TranslatableAbstractModel.
+
+4. Overwrite the model's translations dictionary field of the model inheriting from TranslatableAbstractModel with a keys the name of fields you want to be translated and for their values use the class name from one of the TranslationModel classes.
 
 .. code-block:: sh
 
     # for example
+    from translations.models import (
+        TranslatableAbstractModel,
+        LongTranslationString, TextTranslationString,
+    )
+
     class Company(TranslatableAbstractModel):
         translations = {
             'title': LongTranslationString,
@@ -46,6 +56,7 @@ For any class you want one of its fields to have a translation, you need to:
 
 Use in templates
 ----------------
+
 To be able to get the translation of a model's field using the template language, call the translate filter and to it the field you want to get its value translated to the active language.
 
 1. {% load i18n %}
@@ -53,3 +64,8 @@ To be able to get the translation of a model's field using the template language
 2. {% load translate %}
 
 3. {{ company_object|translate:'title' }}
+
+Use in templates
+----------------
+
+1. Translations for DRF ModelSerializer
